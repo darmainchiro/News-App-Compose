@@ -1,7 +1,5 @@
 package id.ajiguna.newsappcompose.ui.screen
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -24,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,13 +29,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import id.ajiguna.newsappcompose.MockData
-import id.ajiguna.newsappcompose.MockData.getTimeAgo
-import id.ajiguna.newsappcompose.NewsData
+import coil.compose.AsyncImage
+import id.ajiguna.newsappcompose.model.MockData
+import id.ajiguna.newsappcompose.model.MockData.getTimeAgo
 import id.ajiguna.newsappcompose.R
+import id.ajiguna.newsappcompose.network.models.TopNewsArticle
 
 @Composable
-fun DetailScreen(newsData: NewsData, scrollState: ScrollState, navController: NavController){
+fun DetailScreen(article: TopNewsArticle, scrollState: ScrollState, navController: NavController){
     Scaffold(
         topBar = {
             DetailTopAppBar(onBackPressed = {navController.popBackStack()})
@@ -50,18 +49,24 @@ fun DetailScreen(newsData: NewsData, scrollState: ScrollState, navController: Na
                     .verticalScroll(scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(painter = painterResource(id = newsData.image),
-                    contentDescription = "")
+                AsyncImage(
+                    model  = article.urlToImage,
+                    placeholder = painterResource(R.drawable.example),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                    error = painterResource(R.drawable.example)
+                )
+
                 Row(modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    InfoWithIcon(Icons.Default.Edit, info = newsData.author)
-                    InfoWithIcon(Icons.Default.DateRange, info = MockData.stringToDate(newsData.publishedAt).getTimeAgo())
+                    InfoWithIcon(Icons.Default.Edit, info = article.author?:"Not Available")
+                    InfoWithIcon(Icons.Default.DateRange, info = MockData.stringToDate(article.publishedAt!!).getTimeAgo())
                 }
-                Text(text = newsData.title, fontWeight = FontWeight.Bold)
-                Text(text = newsData.description, modifier = Modifier.padding(top=16.dp))
+                Text(text = article.title?:"Not Available", fontWeight = FontWeight.Bold)
+                Text(text = article.description?:"Not Available", modifier = Modifier.padding(top=16.dp))
             }
         }
     )
@@ -94,8 +99,7 @@ fun InfoWithIcon( icon: ImageVector, info: String){
 @Composable
 fun DetailScreenPreview(){
     DetailScreen(
-        NewsData(
-            2,
+        TopNewsArticle(
             author = "Namita Singh",
             title = "Cleo Smith news — live: Kidnap suspect 'in hospital again' as 'hard police grind' credited for breakthrough - The Independent",
             description = "The suspected kidnapper of four-year-old Cleo Smith has been treated in hospital for a second time amid reports he was “attacked” while in custody.",

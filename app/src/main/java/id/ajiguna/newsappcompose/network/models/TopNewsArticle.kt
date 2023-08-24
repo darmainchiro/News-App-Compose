@@ -1,4 +1,4 @@
-package id.ajiguna.newsappcompose.models
+package id.ajiguna.newsappcompose.network.models
 
 data class TopNewsArticle(
     val source : Source? = null,

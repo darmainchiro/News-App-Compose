@@ -1,4 +1,6 @@
-package id.ajiguna.newsappcompose
+package id.ajiguna.newsappcompose.model
+
+import id.ajiguna.newsappcompose.R
 
 data class NewsData(
     val id: Int,

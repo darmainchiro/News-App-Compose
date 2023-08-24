@@ -1,8 +1,9 @@
-package id.ajiguna.newsappcompose
+package id.ajiguna.newsappcompose.model
 
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.util.Log
+import id.ajiguna.newsappcompose.R
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -73,7 +74,7 @@ object MockData {
         )
     )
 
-    fun getNews(newsId: Int?):NewsData{
+    fun getNews(newsId: Int?): NewsData {
         return topNewsList.first{it.id == newsId}
     }
 

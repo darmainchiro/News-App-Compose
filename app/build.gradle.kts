@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "id.ajiguna.newsappcompose"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "id.ajiguna.newsappcompose"
@@ -56,7 +56,7 @@ android {
 
 dependencies {
 
-    implementation ("com.github.skydoves:landscapist-coil:2.2.7")
+    implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
     implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")

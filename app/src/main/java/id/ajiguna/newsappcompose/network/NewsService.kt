@@ -1,6 +1,6 @@
 package id.ajiguna.newsappcompose.network
 
-import id.ajiguna.newsappcompose.models.TopNewsResponse
+import id.ajiguna.newsappcompose.network.models.TopNewsResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
