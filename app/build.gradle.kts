@@ -1,7 +1,11 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
+
 
 android {
     namespace = "id.ajiguna.newsappcompose"
@@ -18,6 +22,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
     }
 
     buildTypes {
@@ -51,6 +56,10 @@ android {
 
 dependencies {
 
+    implementation ("com.github.skydoves:landscapist-coil:2.2.7")
+    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
+    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("androidx.compose.material:material-icons-extended")
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")

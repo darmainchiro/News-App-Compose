@@ -1,5 +1,6 @@
 package id.ajiguna.newsappcompose.ui
 
+import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Scaffold
@@ -16,6 +17,7 @@ import androidx.navigation.navArgument
 import id.ajiguna.newsappcompose.BottomMenuScreen
 import id.ajiguna.newsappcompose.MockData
 import id.ajiguna.newsappcompose.components.BottomMenu
+import id.ajiguna.newsappcompose.network.NewsManager
 import id.ajiguna.newsappcompose.ui.screen.Categories
 import id.ajiguna.newsappcompose.ui.screen.DetailScreen
 import id.ajiguna.newsappcompose.ui.screen.Sources
@@ -42,7 +44,10 @@ fun MainScreen(navController: NavHostController, scrollState: ScrollState){
 }
 
 @Composable
-fun Navigation(navController: NavHostController, scrollState: ScrollState){
+fun Navigation(navController: NavHostController, scrollState: ScrollState, newsManager: NewsManager = NewsManager()){
+    val articles = newsManager.newsResponse.value.articles
+    Log.d("news", "$articles")
+
     NavHost(navController = navController, startDestination = BottomMenuScreen.TopNews.route){
 
         bottomNavigation(navController = navController)
