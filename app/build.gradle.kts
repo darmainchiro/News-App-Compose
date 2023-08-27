@@ -70,6 +70,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
     implementation ("com.github.skydoves:landscapist-coil:1.4.1")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

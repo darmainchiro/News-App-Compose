@@ -47,7 +47,9 @@ fun MainScreen(navController: NavHostController, scrollState: ScrollState){
 
 @Composable
 fun Navigation(navController: NavHostController, scrollState: ScrollState, newsManager: NewsManager = NewsManager(), paddingValues: PaddingValues){
-    val articles = newsManager.newsResponse.value.articles
+    val articles =  mutableListOf(TopNewsArticle())
+    articles.addAll(newsManager.newsResponse.value.articles ?:
+    listOf(TopNewsArticle()))
     Log.d("news", "$articles")
 
     articles?.let {
@@ -59,6 +61,13 @@ fun Navigation(navController: NavHostController, scrollState: ScrollState, newsM
                 navBackStackEntry ->
                 val index = navBackStackEntry.arguments?.getInt("index")
                 index?.let {
+                    if (newsManager.query.value.isNotEmpty()){
+                        articles.clear()
+                        articles.addAll(newsManager.searchedNewsResponse.value.articles ?: listOf())
+                    } else {
+                        articles.clear()
+                        articles.addAll(newsManager.newsResponse.value.articles ?: listOf())
+                    }
                     val article = articles[index]
                     DetailScreen(article, scrollState, navController)
                 }
@@ -68,9 +77,9 @@ fun Navigation(navController: NavHostController, scrollState: ScrollState, newsM
 
 }
 
-fun NavGraphBuilder.bottomNavigation(navController: NavController, article: List<TopNewsArticle>, newsManager: NewsManager){
+fun NavGraphBuilder.bottomNavigation(navController: NavController, articles: List<TopNewsArticle>, newsManager: NewsManager){
     composable(BottomMenuScreen.TopNews.route){
-        TopNews(navController = navController, article = article)
+        TopNews(navController = navController, articles = articles, newsManager.query, newsManager = newsManager)
     }
     composable(BottomMenuScreen.Categories.route){
         newsManager.getArticlesByCategory("business")
@@ -83,7 +92,7 @@ fun NavGraphBuilder.bottomNavigation(navController: NavController, article: List
             })
     }
     composable(BottomMenuScreen.Sources.route){
-        Sources()
+        Sources(newsManager = newsManager)
     }
 
 }

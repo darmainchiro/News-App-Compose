@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,18 +28,28 @@ import com.skydoves.landscapist.coil.CoilImage
 import id.ajiguna.newsappcompose.model.MockData
 import id.ajiguna.newsappcompose.model.MockData.getTimeAgo
 import id.ajiguna.newsappcompose.R
+import id.ajiguna.newsappcompose.components.SearchBar
+import id.ajiguna.newsappcompose.network.NewsManager
 import id.ajiguna.newsappcompose.network.models.TopNewsArticle
+import retrofit2.http.Query
 
 @Composable
-fun TopNews(navController: NavController, article: List<TopNewsArticle>) {
+fun TopNews(navController: NavController, articles: List<TopNewsArticle>, query: MutableState<String>, newsManager: NewsManager) {
     Column(
         modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Top News", fontWeight =  FontWeight.SemiBold)
+        val searchedText = query.value
+        SearchBar(query = query, newsManager = newsManager)
+        val resultList = mutableListOf<TopNewsArticle>()
+        if (searchedText != ""){
+            resultList.addAll(newsManager.searchedNewsResponse.value.articles ?: articles)
+        } else {
+            resultList.addAll(articles)
+        }
         LazyColumn{
-            items(article.size){
+            items(resultList.size){
                 index ->
-                TopNewsItem(article = article[index],
+                TopNewsItem(article = resultList[index],
                     onNewsClick = {  navController.navigate("Detail/$index")}
                 )
             }
@@ -66,9 +77,9 @@ fun TopNewsItem(article: TopNewsArticle, onNewsClick: ()-> Unit = {}){
             .wrapContentHeight()
             .padding(top = 16.dp, start = 16.dp),
             verticalArrangement = Arrangement.SpaceBetween) {
-            Text(text = MockData.stringToDate(article.publishedAt!!).getTimeAgo(), color = Color.White, fontWeight = FontWeight.SemiBold)
+            Text(text = MockData.stringToDate(article.publishedAt?:"2023-08-26T16:00:20Z").getTimeAgo(), color = Color.White, fontWeight = FontWeight.SemiBold)
             Spacer(modifier = Modifier.height(100.dp))
-            Text(text = article.title!!, color = Color.White, fontWeight = FontWeight.SemiBold,
+            Text(text = article.title?:"Not Available", color = Color.White, fontWeight = FontWeight.SemiBold,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
