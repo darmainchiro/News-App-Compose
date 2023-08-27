@@ -15,14 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import com.skydoves.landscapist.coil.CoilImage
 import id.ajiguna.newsappcompose.model.MockData
 import id.ajiguna.newsappcompose.model.MockData.getTimeAgo
 import id.ajiguna.newsappcompose.R
@@ -53,12 +54,13 @@ fun TopNewsItem(article: TopNewsArticle, onNewsClick: ()-> Unit = {}){
         .clickable {
             onNewsClick()
         }){
-        AsyncImage(
-            model  = article.urlToImage,
-            placeholder = painterResource(R.drawable.example),
-            contentDescription = "",
+        CoilImage(
+            imageModel = article.urlToImage,
+            // Crop, Fit, Inside, FillHeight, FillWidth, None
             contentScale = ContentScale.Crop,
-            error = painterResource(R.drawable.example)
+            error = ImageBitmap.imageResource(R.drawable.example),
+            // shows a placeholder ImageBitmap when loading.
+            placeHolder = ImageBitmap.imageResource(R.drawable.example)
         )
         Column(modifier = Modifier
             .wrapContentHeight()

@@ -20,16 +20,18 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
+import com.skydoves.landscapist.coil.CoilImage
 import id.ajiguna.newsappcompose.model.MockData
 import id.ajiguna.newsappcompose.model.MockData.getTimeAgo
 import id.ajiguna.newsappcompose.R
@@ -49,12 +51,13 @@ fun DetailScreen(article: TopNewsArticle, scrollState: ScrollState, navControlle
                     .verticalScroll(scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                AsyncImage(
-                    model  = article.urlToImage,
-                    placeholder = painterResource(R.drawable.example),
-                    contentDescription = "",
+                CoilImage(
+                    imageModel = article.urlToImage,
+                    // Crop, Fit, Inside, FillHeight, FillWidth, None
                     contentScale = ContentScale.Crop,
-                    error = painterResource(R.drawable.example)
+                    error = ImageBitmap.imageResource(R.drawable.example),
+                    // shows a placeholder ImageBitmap when loading.
+                    placeHolder = ImageBitmap.imageResource(R.drawable.example)
                 )
 
                 Row(modifier = Modifier

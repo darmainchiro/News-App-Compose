@@ -55,8 +55,6 @@ android {
 }
 
 dependencies {
-
-    implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
     implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
@@ -70,6 +68,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material:material")
     implementation("androidx.navigation:navigation-compose:2.5.3")
+
+    implementation ("com.github.skydoves:landscapist-coil:1.4.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
