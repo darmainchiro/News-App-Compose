@@ -13,6 +13,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +26,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import id.ajiguna.newsappcompose.R
 import com.skydoves.landscapist.coil.CoilImage
+import id.ajiguna.newsappcompose.components.ErrorUI
+import id.ajiguna.newsappcompose.components.LoadingUI
 import id.ajiguna.newsappcompose.model.getAllArticleCategory
 import id.ajiguna.newsappcompose.model.MockData
 import id.ajiguna.newsappcompose.model.MockData.getTimeAgo
@@ -34,17 +37,29 @@ import id.ajiguna.newsappcompose.ui.MainViewModel
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun Categories(onFetchCategory: (String) -> Unit={}, viewModel: MainViewModel){
+fun Categories(onFetchCategory: (String) -> Unit={}, viewModel: MainViewModel,
+               isLoading: MutableState<Boolean>, isError: MutableState<Boolean>){
+
     val tabsItems = getAllArticleCategory()
     Column {
-        LazyRow(){
-            items(tabsItems.size){
-                val category = tabsItems[it]
-                CategoryTab(
-                    category = category.categoryName, onFetchCategory = onFetchCategory,
-                    isSelected =
-                    viewModel.selectedCategory.collectAsState().value == category
-                )
+
+        when{
+            isLoading.value -> {
+                LoadingUI()
+            }
+            isError.value -> {
+                ErrorUI()
+            } else -> {
+                LazyRow(){
+                    items(tabsItems.size){
+                        val category = tabsItems[it]
+                        CategoryTab(
+                            category = category.categoryName, onFetchCategory = onFetchCategory,
+                            isSelected =
+                            viewModel.selectedCategory.collectAsState().value == category
+                        )
+                    }
+                }
             }
         }
 

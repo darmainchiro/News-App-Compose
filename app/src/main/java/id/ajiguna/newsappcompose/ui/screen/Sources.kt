@@ -20,6 +20,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,12 +39,15 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import id.ajiguna.newsappcompose.R
+import id.ajiguna.newsappcompose.components.ErrorUI
+import id.ajiguna.newsappcompose.components.LoadingUI
 import id.ajiguna.newsappcompose.network.NewsManager
 import id.ajiguna.newsappcompose.network.models.TopNewsArticle
 import id.ajiguna.newsappcompose.ui.MainViewModel
 
 @Composable
-fun Sources(viewModel: MainViewModel){
+fun Sources(viewModel: MainViewModel, isLoading: MutableState<Boolean>,
+            isError: MutableState<Boolean>){
     val items = listOf(
         "TechCrunch" to "techcrunch",
         "TalkSport" to "talksport",
@@ -80,9 +84,18 @@ fun Sources(viewModel: MainViewModel){
             )
         }
     ){it
-        viewModel.getArticleBySource()
-        val article = viewModel.getArticleBySource.collectAsState().value
-        SourceContent(articles = article.articles ?: listOf())
+        when{
+            isLoading.value -> {
+                LoadingUI()
+            }
+            isError.value -> {
+                ErrorUI()
+            } else -> {
+                viewModel.getArticleBySource()
+                val article =  viewModel.getArticleBySource.collectAsState().value
+                SourceContent(articles = article.articles ?: listOf())
+            }
+        }
     }
 }
 

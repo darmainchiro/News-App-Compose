@@ -29,6 +29,8 @@ import com.skydoves.landscapist.coil.CoilImage
 import id.ajiguna.newsappcompose.model.MockData
 import id.ajiguna.newsappcompose.model.MockData.getTimeAgo
 import id.ajiguna.newsappcompose.R
+import id.ajiguna.newsappcompose.components.ErrorUI
+import id.ajiguna.newsappcompose.components.LoadingUI
 import id.ajiguna.newsappcompose.components.SearchBar
 import id.ajiguna.newsappcompose.network.NewsManager
 import id.ajiguna.newsappcompose.network.models.TopNewsArticle
@@ -37,7 +39,9 @@ import retrofit2.http.Query
 
 @Composable
 fun TopNews(navController: NavController, articles: List<TopNewsArticle>,
-            query: MutableState<String>, viewModel: MainViewModel) {
+            query: MutableState<String>, viewModel: MainViewModel,
+            isLoading: MutableState<Boolean>,
+            isError: MutableState<Boolean>) {
     Column(
         modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -49,14 +53,25 @@ fun TopNews(navController: NavController, articles: List<TopNewsArticle>,
         } else {
             resultList.addAll(articles)
         }
-        LazyColumn{
-            items(resultList.size){
-                index ->
-                TopNewsItem(article = resultList[index],
-                    onNewsClick = {  navController.navigate("Detail/$index")}
-                )
+
+        when{
+            isLoading.value -> {
+                LoadingUI()
+            }
+            isError.value ->{
+                ErrorUI()
+            } else -> {
+                LazyColumn{
+                    items(resultList.size){
+                            index ->
+                        TopNewsItem(article = resultList[index],
+                            onNewsClick = {  navController.navigate("Detail/$index")}
+                        )
+                    }
+                }
             }
         }
+
     }
 }
 
