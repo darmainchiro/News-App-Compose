@@ -1,5 +1,6 @@
 package id.ajiguna.newsappcompose.ui.screen
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -12,6 +13,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -28,9 +30,11 @@ import id.ajiguna.newsappcompose.model.MockData
 import id.ajiguna.newsappcompose.model.MockData.getTimeAgo
 import id.ajiguna.newsappcompose.network.NewsManager
 import id.ajiguna.newsappcompose.network.models.TopNewsArticle
+import id.ajiguna.newsappcompose.ui.MainViewModel
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun Categories(onFetchCategory: (String) -> Unit={}, newsManager: NewsManager){
+fun Categories(onFetchCategory: (String) -> Unit={}, viewModel: MainViewModel){
     val tabsItems = getAllArticleCategory()
     Column {
         LazyRow(){
@@ -39,13 +43,12 @@ fun Categories(onFetchCategory: (String) -> Unit={}, newsManager: NewsManager){
                 CategoryTab(
                     category = category.categoryName, onFetchCategory = onFetchCategory,
                     isSelected =
-                    newsManager.selectedCategory.value == category
+                    viewModel.selectedCategory.collectAsState().value == category
                 )
             }
         }
 
-        ArticleContent(articles = newsManager.getArticleByCategory.value.articles ?: listOf())
-
+        ArticleContent(articles = viewModel.getArticleByCategory.collectAsState().value.articles ?: listOf())
     }
 }
 

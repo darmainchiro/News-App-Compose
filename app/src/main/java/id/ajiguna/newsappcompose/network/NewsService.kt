@@ -7,21 +7,21 @@ import retrofit2.http.Query
 
 interface NewsService {
     @GET("top-headlines")
-    fun getTopArticle(
+    suspend fun getTopArticle(
         @Query("country")country: String
-    ): Call<TopNewsResponse>
+    ): TopNewsResponse
 
     @GET("top-headlines")
-    fun getArticlesByCategories(
+    suspend fun getArticlesByCategories(
         @Query("category") category:String
-    ):Call<TopNewsResponse>
+    ): TopNewsResponse
 
     @GET("everything")
-    fun getArticlesBySources(@Query("sources") source:String
-    ):Call<TopNewsResponse>
+    suspend fun getArticlesBySources(@Query("sources") source:String
+    ): TopNewsResponse
 
     @GET("everything")
-    fun getArticles(@Query("q") source:String
-    ):Call<TopNewsResponse>
+    suspend fun getArticles(@Query("q") source:String
+    ): TopNewsResponse
 
 }
